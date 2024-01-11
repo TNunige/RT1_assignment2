@@ -1,8 +1,5 @@
 # RT1_assignment2
-assignment2_2023
-===================
 
-In this assignment we are going to learn how to operate ROS costum messages, costum services, and actions. We are also going to use the graphical interfaces (Rviz and Gazebo) to view the robot's simulation. The new package was built starting from the template provided, assignment_2_2023.
 
 Second Assignment description
 ===================
@@ -59,26 +56,36 @@ Action client's pseudocode [node (a)]:
 ----------------------------
 
 1. Run the node
-2. Initialize a node named "client" in ROS
-3. Create an object of class "Client"
+2. Initialize ROS node
+3. Create an object of class "ActionClient"
 4. Within the class "Client":
    * Initialization function "__init__":
-      - Set two variables "position" and "linear_velocity" to None
-      - Create a publisher to publish position information
-      - Create a subscriber to listen for odometry information and store the received position and linear velocity information
-      - Create an action client for the "reaching_goal" action server
-      - Wait for the action server to become usable
-      - Create a goal message for the "reaching_goal" action
-      - Create a publisher to send the target
-   * Implement the "odom_callback" function:
-      - Store the received position and linear velocity information from the odometry message
-      - Create a new message to publish the position and velocity information
-      - Publish the message
-   * Implement the "goal_input" function:
-      - Print a prompt to ask the user to insert the goal coordinates or cancel the goal
-      - Listen for user input in an infinite loop
-      - If the user inputs 'c', cancel the current goal
-      - If the user inputs is a float value, set the goal coordinates and send the goal to the action server and to the message
-      - If the input is not a float value, print an error message
-5. Call the "goal_input" function with using the object "client"
+      - Initialize ROS node
+      - Create a publisher for robot position information
+      - Create action client for reaching_goal action
+      - Wait for the server to be ready
+      - Create a publisher for target coordinates
+      - Create a subscriber to listen for /odom topic
+      - Create a goal message
+   * Implement the "__odom_callback__" function:
+      - Extract position and linear velocity information from odometry message
+      - Create custom message to publish position and velocity information
+      - Publish custom message
+   * Implement the "__set_goal__" function:
+      - Set goal coordinates in action goal message
+      - Send goal to action sever
+      - Publish target coordinates
+   * Implement the "__cancel_goal__" function:
+      - Cancel the current goal
+      - Log the information about the goal cancellation 
+5. Get user input for goal coordinates or cancel it
+  * If the user inputs 'c', call the "__cancel_goal__" function
+  * If the user inputs the new goal
+    - parse the user input as float values for x and y
+    - call the "__set_goal__" function to set the goal using the parsed coordinates
+  * If the user inputs in an invalid format, log a warning
+6. Spin to keep the ROS node alive
+
+  
+   
 
